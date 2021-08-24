@@ -128,4 +128,40 @@ services.create = async ({ username, password, roles }) => {
   }
 };
 
+services.changePswd = async ({ userId, newPassword }) => {
+  const user = await User.findByPk(userId);
+
+  if (!user) {
+    return { data: null, message: "User Not found.", success: false };
+  }
+
+  const updateduser = await user.update({
+    password: bcrypt.hashSync(newPassword, 12),
+  });
+
+  if (updateduser) {
+    return {
+      data: null,
+      message: "Password changed successfully!",
+      success: true,
+    };
+  }
+};
+
+services.forgetPswd = async ({ username, newPassword }) => {
+  const user = await User.findOne({ where: { username } });
+
+  const updatedUser = await user.update({
+    password: bcrypt.hashSync(newPassword, 12),
+  });
+
+  if (updatedUser) {
+    return {
+      data: null,
+      message: "Password updated successfully!",
+      success: true,
+    };
+  }
+};
+
 module.exports = services;

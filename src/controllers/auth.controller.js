@@ -30,3 +30,24 @@ exports.refreshToken = async (req, res) => {
     responseTransformer(res, null, "Failed to create refresh token!", false);
   }
 };
+
+exports.changePswd = async (req, res) => {
+  const { newPassword } = req.body;
+  const userId = req.userId;
+  try {
+    const result = await services.changePswd({ userId, newPassword });
+    responseTransformer(res, result.data, result.message, result.success);
+  } catch (error) {
+    responseTransformer(res, null, "Failed to change password!", false);
+  }
+};
+
+exports.forgetPswd = async (req, res) => {
+  const { username, newPassword } = req.body;
+  try {
+    const result = await services.forgetPswd({ username, newPassword });
+    responseTransformer(res, result.data, result.message, result.success);
+  } catch (error) {
+    responseTransformer(res, null, "Failed to create new password!", false);
+  }
+};
